@@ -27,21 +27,36 @@ class ApiController
         switch ($method) {
             case "GET":
                 echo json_encode($this->gateway->getById($id));
+                if ($this->gateway->getById($id) == false) {
+                    http_response_code(204);
+                    echo "This post doesn't exist";
+                }
                 break;
             case "PUT":
                 $data = (array) json_decode(file_get_contents("php://input"), true);
-                $this->gateway->editPost($data, $id);
-                echo json_encode([
-                    "Message" => "Post updated",
-                    "id" => $id
-                ]);
-                break;
+                if ($this->gateway->getById($id) == false) {
+                    http_response_code(204);
+                    echo "This post doesn't exist";
+                } else {
+                    $this->gateway->editPost($data, $id);
+                    echo json_encode([
+                        "Message" => "Post updated",
+                        "id" => $id
+                    ]);
+                    break;
+                }
             case "DELETE":
-                $this->gateway->deletePost($id);
-                echo json_encode([
-                    "Message" => "Post deleted",
-                    "id" => $id
-                ]);
+                if ($this->gateway->getById($id) == false) {
+                    http_response_code(204);
+                    echo "This post doesn't exist";
+                } else {
+                    $this->gateway->deletePost($id);
+                    echo json_encode([
+                        "Message" => "Post deleted",
+                        "id" => $id
+                    ]);
+                    break;
+                }
         }
     }
     private function processCollectionRequest(string $method): void
