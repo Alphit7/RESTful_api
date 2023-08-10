@@ -56,4 +56,11 @@ class ApiGateway
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
     }
+    public function deletePost($id): void
+    {
+        $sql = "DELETE FROM posts WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+    }
 }

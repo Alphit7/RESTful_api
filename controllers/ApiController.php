@@ -36,6 +36,12 @@ class ApiController
                     "id" => $id
                 ]);
                 break;
+            case "DELETE":
+                $this->gateway->deletePost($id);
+                echo json_encode([
+                    "Message" => "Post deleted",
+                    "id" => $id
+                ]);
         }
     }
     private function processCollectionRequest(string $method): void
